@@ -23,50 +23,62 @@
             border-radius: 10px;
         }
 
-        input:focus-visible{
+        input:focus-visible {
             outline: none;
-        }
-
-        .row {
-            padding: 10px
         }
     </style>
 </head>
 
-<body  style="background-color:#262626!important;">
-    <div class="flex flex-col" style="height:100dvh">
+<body style="background-color:#262626!important;">
+    <div class="flex flex-col" style="height:100dvh;">
         <div style="background-color:#212121;border-bottom:1px solid hsla(0,0%,100%,.1);padding:20px">
-            <h1 style="font-size:30px;color:#eee">Hi，T9670</h1>
+            <h1 style="font-size:30px;color:#eee">Hi，{{$name}}</h1>
             <p style="margin-top:10px;font-size:20px;color:#eee">還要：<span style="color:#f97316;font-weight:700">{{$count}}</span></p>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li style="color:red;margin-top:10px">{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="" style="height:100vh;overflow-y:auto">
-            <div class="card-body" style="padding:20px; color:#ececec">
-                <div class="row">
-                    台灣
+        <div id="card-body" class="" style="height:100%;overflow-y:auto;">
+            <div class="card-body p-4 text-emerald-50">
+                @foreach ($keywords as $keyword)
+                <div class="p-2 flex justify-between">
+                    <div>
+                        {{$keyword->keyword;}}
+                    </div>
+                    <div>
+                        {{$keyword->created_at->format('H:i:s');}}
+                    </div>
                 </div>
-                <div class="row">
-                    三房
-                </div>
-                <div class="row">
-                    台灣
-                </div>
+                @endforeach
             </div>
         </div>
         <div class="text-xl p-px w-full " style="padding:0 16px">
             <div class="align-items-center my-3 rounded-2xl" style="padding:10px;border:1px solid rgba(255, 255, 255, 0.4);">
-                <form method="post" action="/key-word/{{$uuid}}">
-                @csrf
+                <form method="post" action="/keyword/{{$uuid}}">
+                    @csrf
                     <div class="flex items-center">
                         <img src="{{ asset('bot.webp') }}" width="46" height="46">
-                        <input type="text" style="margin:0 10px;width:100%;background-color:transparent;color:white;" placeholder="請餵我關鍵字">
+                        @if($count !== 0)
+                        <input type="text" name="keyword" style="margin:0 10px;width:100%;background-color:transparent;color:white;" placeholder="請餵我關鍵字">
                         <button type="submit" class="rounded-xl" style="min-width:40px;width:40px;height:40px;background-color:rgba(255, 255, 255, 0.4)">
                             <i class="fa-solid fa-arrow-up" style="color:#262626"></i>
                         </button>
+                        @else
+                        <p style="color:white">恭喜完成!!!</p>
+                        @endif
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var cardBody = document.getElementById("card-body");
+            cardBody.scrollTop = cardBody.scrollHeight;
+        });
+    </script>
 </body>
 
 </html>
